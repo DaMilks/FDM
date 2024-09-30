@@ -15,10 +15,10 @@ namespace FDM
     {
         
         Timer timer = new Timer();
-        double time=0, previosTemp,previosTemp1,MinTemp=350,Maxtemp=0;
+        double time=0, previosTemp,previosTemp1,MinTemp=350,Maxtemp=0,Diffkoef1=0.5,Doffkoef2=0.2;
         static int numpoints = 100;
         double[] data = new double[numpoints];
-        static double L = 10, T = 300;
+        static double L = 10, T = 0;
         static double stepX = L / numpoints;
         double stepT = 0.5 * stepX*stepX;
         public Form1()
@@ -55,12 +55,13 @@ namespace FDM
         {
             time += stepT;
             previosTemp = data[0];
-            data[0] = Func(time);
+            data[0] = 100;
             ChartTX.Series[0].Points.Clear();
             for(int i = 1; i < numpoints-1; i++)
             {
+                if(numpoints/3<i&i<numpoints*2/3)
                 previosTemp1 = data[i];
-                data[i]=0.5*previosTemp + 0.5 * data[i + 1];
+                data[i]=previosTemp+stepT*Diffkoef1/stepX*(data[i+1]-2*previosTemp+data[i-1]);
                 ChartTX.Series[0].Points.AddXY(i*stepX, data[i]);
                 previosTemp=previosTemp1;
             }
