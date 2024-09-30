@@ -64,13 +64,13 @@ namespace FDM
                 ChartTX.Series[0].Points.AddXY(i*stepX, data[i]);
                 previosTemp=previosTemp1;
             }
-            if (time > 8.5)
+            if (time > 5)
             {
-                ChartTt.Series[0].Points.AddXY(time, data[numpoints/5]);
+                ChartTt.Series[0].Points.AddXY(time, data[numpoints/10]);
             
-                if (data[numpoints / 5] > Maxtemp)
+                if (data[numpoints / 10] > Maxtemp)
                     Maxtemp = data[numpoints / 10];
-                if (data[numpoints / 5] < MinTemp)
+                if (data[numpoints / 10] < MinTemp)
                     MinTemp = data[numpoints / 10];
             }
         }
