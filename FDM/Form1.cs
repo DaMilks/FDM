@@ -15,12 +15,12 @@ namespace FDM
     {
         
         Timer timer = new Timer();
-        double time=0, previosTemp,previosTemp1,MinTemp=350,Maxtemp=0,Diffkoef1=0.5,Doffkoef2=0.2;
-        static int numpoints = 100;
+        double time=0, previosTemp,previosTemp1,MinTemp=350,Maxtemp=0,dk;
+        static int numpoints = 30;
         double[] data = new double[numpoints];
-        static double L = 10, T = 0;
+        static double L = 10, T = 0,Diffkoef1=3,Diffkoef2=1;
         static double stepX = L / numpoints;
-        double stepT = 0.5 * stepX*stepX;
+        double stepT = stepX*stepX/(2*Diffkoef1*Diffkoef2);
         public Form1()
         {
             InitializeComponent();
@@ -36,13 +36,20 @@ namespace FDM
         {
             return 300 + 2 * Math.Sin(2 * Math.PI * 7 * t);
         }
+        private double D(int n)
+        {
+            if(numpoints/3.0<n&n<numpoints*2.0/3)
+                    return Diffkoef2;
+                else
+                    return Diffkoef1;
+        }
         private void button1_Click(object sender, EventArgs e)
         {
-            ChartTX.ChartAreas[0].AxisY.Minimum = 297;
-            ChartTX.ChartAreas[0].AxisY.Maximum = 303;
-            ChartTt.ChartAreas[0].AxisY.Minimum = 299.95;
-            ChartTt.ChartAreas[0].AxisY.Maximum = 300.05;
-            for (int i = 0; i < numpoints; i++)
+
+            data[0] = 100;
+                
+            ChartTX.Series[0].Points.AddXY(0, data[0]);
+            for (int i = 1; i < numpoints; i++)
             {
                 data[i] = T;
                 ChartTX.Series[0].Points.AddXY(i*stepX, data[i]);
@@ -59,20 +66,11 @@ namespace FDM
             ChartTX.Series[0].Points.Clear();
             for(int i = 1; i < numpoints-1; i++)
             {
-                if(numpoints/3<i&i<numpoints*2/3)
+                
                 previosTemp1 = data[i];
-                data[i]=previosTemp+stepT*Diffkoef1/stepX*(data[i+1]-2*previosTemp+data[i-1]);
+                data[i]=data[i]-stepT/(stepX*stepX)*(D(i+1)*(data[i]-data[i+1])+D(i-1)*(data[i]-previosTemp));
                 ChartTX.Series[0].Points.AddXY(i*stepX, data[i]);
                 previosTemp=previosTemp1;
-            }
-            if (time > 5)
-            {
-                ChartTt.Series[0].Points.AddXY(time, data[numpoints/10]);
-            
-                if (data[numpoints / 10] > Maxtemp)
-                    Maxtemp = data[numpoints / 10];
-                if (data[numpoints / 10] < MinTemp)
-                    MinTemp = data[numpoints / 10];
             }
         }
         }
