@@ -52,24 +52,24 @@ namespace FDM
             {
                 data1[i - 1] = a[i - 1] * data1[i] + b[i - 1];
             }
-            time += stepT;
-            previosTemp = data[0];
-            data[0] = Func(time);
+            //time += stepT;
+            //previosTemp = data[0];
+            //data[0] = Func(time);
 
-            for (int i = 1; i < numpoints - 1; i++)
-            {
-                previosTemp1 = data[i];
+            //for (int i = 1; i < numpoints - 1; i++)
+            //{
+            //    previosTemp1 = data[i];
 
 
-                data[i] = (1 / s) * previosTemp + (1 - 2 * (1 / s)) * data[i] + (1 / s) * data[i + 1];
+            //    data[i] = (1 / s) * previosTemp + (1 - 2 * (1 / s)) * data[i] + (1 / s) * data[i + 1];
 
-                previosTemp = previosTemp1;
-            }
+            //    previosTemp = previosTemp1;
+            //}
             ChartTX1.Series[0].Points.Clear();
             ChartTX1.Series[1].Points.Clear();
             for (int i = 0; i < numpoints; i++)
             {
-                ChartTX1.Series[1].Points.AddXY(i * stepX, data[i]);
+                //ChartTX1.Series[1].Points.AddXY(i * stepX, data[i]);
                 ChartTX1.Series[0].Points.AddXY(i * stepX, data1[i]);
             }
 
